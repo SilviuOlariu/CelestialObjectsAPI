@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CelestialCatalogAPI.Entities;
+using CelestialCatalogAPI.Http;
 using CelestialCatalogAPI.Models;
 using CelestialCatalogAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,6 @@ using System.Threading.Tasks;
 namespace CelestialCatalogAPI.Controllers
 {
      [ApiController]
-  //  [Route("api/discoverysource")]
     public class DiscoverySourceController : ControllerBase
     {
         
@@ -25,7 +25,7 @@ namespace CelestialCatalogAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/discoverysource")]
+        [Route(DiscoveryRoutes.GetSources)]
         public IActionResult GetDiscoverySource()
         {
             return Ok(_catalogRepository.GetDiscoverySource());
@@ -33,7 +33,7 @@ namespace CelestialCatalogAPI.Controllers
         }
        
         [HttpPost]
-        [Route("api/discoverysource")]
+        [Route(DiscoveryRoutes.PostSource)]
         public IActionResult AddDiscoverySource([FromBody] DiscoverySourceDto discoverySourceDto)
         {
             if(!ModelState.IsValid)

@@ -4,14 +4,16 @@ using CelestialCatalogAPI.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CelestialCatalogAPI.Migrations
 {
     [DbContext(typeof(CelestialCatalogContext))]
-    partial class CelestialCatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20200817081859_addingOneToMany")]
+    partial class addingOneToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

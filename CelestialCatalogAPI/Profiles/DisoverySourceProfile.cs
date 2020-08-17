@@ -12,6 +12,7 @@ namespace CelestialCatalogAPI.Profiles
         {
             CreateMap<Entities.DiscoverySource, Models.DiscoverySourceDto>();
             CreateMap<Models.DiscoverySourceDto, Entities.DiscoverySource>();
+               
         }
     }
 }

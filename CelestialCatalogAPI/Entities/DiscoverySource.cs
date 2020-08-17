@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,9 +12,11 @@ namespace CelestialCatalogAPI.Entities
         public string Name { get; set; }
         [Required]
         public DateTime EstablishmentDate { get; set; }
-        
+
         public string StateOwner { get; set; }
         public string Type { get; set; }
+        
+        ICollection<CelestialObject> CelestialObjects { get; set; } = new List<CelestialObject>(); 
        
    }
 

@@ -12,6 +12,7 @@ namespace CelestialCatalogAPI.Profiles
         {
             CreateMap<Entities.CelestialObject, Models.CelestialObjectDto>();
             CreateMap<Models.CelestialObjectDto, Entities.CelestialObject>();
+              
         }
     }
 }

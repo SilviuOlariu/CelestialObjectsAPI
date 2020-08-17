@@ -46,7 +46,9 @@ namespace CelestialCatalogAPI.Services
 
         public IEnumerable<CelestialObject> GetObjectByCountry(string country)
         {
-            throw new NotImplementedException();
+            var celestialObjects = _ctx.CelestialObjects.Where(a => a.DiscoverySourceId == a.DiscoverySource.Id && a.DiscoverySource.StateOwner == country);
+
+            return celestialObjects.ToList();
             
         }
 
