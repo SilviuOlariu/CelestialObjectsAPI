@@ -2,6 +2,7 @@
 using CelestialCatalogAPI.Entities;
 using CelestialCatalogAPI.Extensions;
 using CelestialCatalogAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace CelestialCatalogAPI.Services
 {
     public class CatalogRepository : ICatalogRepository
     {
-        public readonly CelestialCatalogContext _ctx;
+        private readonly CelestialCatalogContext _ctx;
         public CatalogRepository(CelestialCatalogContext ctx)
         {
             _ctx = ctx;
@@ -19,7 +20,7 @@ namespace CelestialCatalogAPI.Services
 
         public void AddCelestialObject(CelestialObject celestialobject)
         {
-            _ctx.Add(celestialobject);
+            _ctx.CelestialObjects.Add(celestialobject);
         }
 
         public void AddDiscoverySource( DiscoverySource discoverySource)
@@ -29,13 +30,14 @@ namespace CelestialCatalogAPI.Services
         }
 
         public IEnumerable<CelestialObject> GetCelestialObjects()
-        {
-           return _ctx.CelestialObjects.ToList();
+        { 
+            var result = _ctx.CelestialObjects.Include(a => a.DiscoverySource).ToList();
+            return result;
         }
 
         public IEnumerable<CelestialObject> GetCelestialObjectsByName(string name)
         {
-            var result = _ctx.CelestialObjects.Where(n => n.Name == name);
+            var result = _ctx.CelestialObjects.Where(n => n.Name == name).Include(a => a.DiscoverySource);
             return result.ToList();
         }
 
@@ -46,7 +48,7 @@ namespace CelestialCatalogAPI.Services
 
         public IEnumerable<CelestialObject> GetObjectByCountry(string country)
         {
-            var celestialObjects = _ctx.CelestialObjects.Where(a => a.DiscoverySourceId == a.DiscoverySource.Id && a.DiscoverySource.StateOwner == country);
+            var celestialObjects = _ctx.CelestialObjects.Where( a => a.DiscoverySource.StateOwner == country).Include(a => a.DiscoverySource);
 
             return celestialObjects.ToList();
             
@@ -54,7 +56,7 @@ namespace CelestialCatalogAPI.Services
 
         public IEnumerable<CelestialObject> GetCelestialObjectbyType(string type)
         {
-            var result = _ctx.CelestialObjects.Where(a => a.Type == type);
+            var result = _ctx.CelestialObjects.Where(a => a.Type == type).Include(a =>a.DiscoverySource);
 
             return result.ToList();
         }

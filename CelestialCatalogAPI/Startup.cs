@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using CelestialCatalogAPI.Services;
+using CelestialCatalogAPI.Extensions;
 
 namespace CelestialCatalogAPI
 {
@@ -35,6 +36,7 @@ namespace CelestialCatalogAPI
                     o.UseSqlServer(connectionString);
                 }
                 );
+            services.AddTransient<TypeCalculator, TypeCalculator>();
             services.AddScoped<ICatalogRepository, CatalogRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
           
@@ -50,10 +52,7 @@ namespace CelestialCatalogAPI
 
             app.UseMvc();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+           
         }
     }
 }

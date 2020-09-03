@@ -19,53 +19,53 @@ namespace CelestialCatalogAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICatalogRepository _catalogRepository;
-        public CelestialObjectController(IMapper mapper, ICatalogRepository catalogRepository)
+        private readonly TypeCalculator _typeCalculator;
+        public CelestialObjectController(IMapper mapper, ICatalogRepository catalogRepository, TypeCalculator typeCalculator)
         {
             _mapper = mapper;
             _catalogRepository = catalogRepository;
+            _typeCalculator = typeCalculator;
         }
         [HttpGet]
-        [Route(CelestialRoutes.GetObjects)]
+        [Route(CelestialRoutes.Objects)]
         public IActionResult GetCelestialObjects()
         {
-            var celestialObject = _catalogRepository.GetCelestialObjects().ToList();
-            var result = _mapper.Map<IEnumerable<CelestialObjectDto>>(celestialObject);
-            return Ok(result);
+            var celestialObject = _catalogRepository.GetCelestialObjects();
+            return Ok(celestialObject);
         }
         [HttpGet]
-        [Route(CelestialRoutes.GetObjectsByType)]
+        [Route(CelestialRoutes.ObjectsByType)]
         public IActionResult GetCelestialObjectsByType(string type)
         {
-            var celestialObject = _catalogRepository.GetCelestialObjectbyType(type);
-            var result = _mapper.Map<IEnumerable<CelestialObjectDto>>(celestialObject);
-            return Ok(result);
+            var celestialObject = _catalogRepository.GetCelestialObjectbyType(type);     
+            return Ok(celestialObject);
+
         }
         [HttpGet]
-        [Route(CelestialRoutes.GetObjectsByName)]
+        [Route(CelestialRoutes.ObjectsByName)]
         public IActionResult GetCelestialObjectByName(string name)
         {
             var celestialObject = _catalogRepository.GetCelestialObjectsByName(name);
-            var result = _mapper.Map<IEnumerable<CelestialObjectDto>>(celestialObject);
-            return Ok(result);
+            return Ok(celestialObject);
         }
         [HttpGet]
-        [Route(CelestialRoutes.GetObjectByCountry)]
+        [Route(CelestialRoutes.ObjectByCountry)]
         public IActionResult GetCelestialObjectByCountry(string country)
         {
             var celestialObject = _catalogRepository.GetObjectByCountry(country);
-            var result = _mapper.Map<IEnumerable<CelestialObjectDto>>(celestialObject);
-            return Ok(result);
+            return Ok(celestialObject);
         }
         [HttpPost]
-        [Route(CelestialRoutes.GetObjects)]
+        [Route(CelestialRoutes.Objects)]
         public IActionResult CreateCelestialObject([FromBody] CelestialObjectDto celestialObjectDto)
         {
             if(!ModelState.IsValid)
             {
                 return NotFound();
             }
-          celestialObjectDto.ClassifyObject();
+          
             var celestialObject = _mapper.Map<CelestialObject>(celestialObjectDto);
+            _typeCalculator.SetCelestialObjectType(celestialObject);
             _catalogRepository.AddCelestialObject(celestialObject);
             _catalogRepository.Save();
                return Ok(celestialObject);
